@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+import "graph.proto";
+
+package TCProto; //TODO тот же что и изначальный
+
+//TODO перенести сюда прочую информацию//
+//    repeated BusEdges bus_edges = 7;
+//    repeated CompanyEdge company_edges = 8;
+
+/*message BusEdges {
+    string bus_name = 1;
+    repeated EdgeElement elements = 2;
+}
+
+message CompanyEdge {
+    string company_name = 1;
+    repeated CompanyEdgeElement elements = 2;
+}*/
+
+
+message TransportRouter {
+  GraphProto.Router router = 1;
+}
+

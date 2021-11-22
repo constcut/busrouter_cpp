@@ -1,0 +1,129 @@
+syntax = "proto3";
+
+package Database;
+
+import "database.proto";
+
+import "transport_router.proto";
+
+//Serialization of parser
+message Stop {
+    repeated string bus_names = 1;
+}
+
+message Bus {
+    uint32 stop_count = 1;
+    uint32 unique_stop_count = 2;
+    uint32 route_length =  3;
+    double curvative = 4;
+}
+
+
+//Serialization of router
+message EdgeElement {
+    double total_time = 1;
+    uint32 spans_count = 2;
+    uint32 idx1 = 3;
+    uint32 idx2 = 4;
+}
+message CompanyEdgeElement {
+    double total_time = 1;
+    uint32 idx1 = 3;
+    uint32 idx2 = 4;
+}
+
+message BusEdges {
+    string bus_name = 1;
+    repeated EdgeElement elements = 2;
+}
+
+message CompanyEdge {
+    string company_name = 1;
+    repeated CompanyEdgeElement elements = 2;
+}
+
+
+//Needed for render
+message BusInfo {
+    repeated uint32 stops = 1;
+    repeated uint32 end_points = 2;
+    bool is_cyclic = 3;
+}
+
+message SvgPoint {
+    double x = 1;
+    double y = 2;
+}
+
+
+message RGB {
+    uint32 red = 1;
+    uint32 green = 2;
+    uint32 blue = 3;
+}
+
+message RGBa {
+    uint32 red = 1;
+    uint32 green = 2;
+    uint32 blue = 3;
+    double opacity = 4;
+}
+
+
+message SvgColor {
+    oneof color_type {
+        string string_value = 1;
+        RGB rgb_value = 2;
+        RGBa rgba_value = 3;
+    }
+}
+
+
+message RenderingSettings {
+    double max_width = 1;
+    double max_height = 2;
+    double padding = 3;
+    
+    double line_width = 4;
+    SvgColor underlayer_color = 5;
+    double underlayer_width = 6;
+    
+    double stop_radius = 7;
+    SvgPoint stop_label_offset = 8;
+    uint32 stop_label_font_size = 9;
+    uint32 bus_label_font_size = 10;
+    SvgPoint bus_label_offset = 11;
+    
+    repeated string layers = 12;
+
+    double outer_margin = 13;   
+    
+    double company_radius = 14;
+    double company_line_width = 15;
+}
+
+
+//Main databases
+message TransportCatalog {
+
+    repeated string stop_names = 1;
+    repeated Stop stop_stats = 2;
+    
+    repeated string bus_names = 3;
+    repeated Bus bus_stats = 4;
+    repeated BusInfo bus_info = 5;
+  
+    //Cover under TransportRouter - change namespace
+    double bus_wait_time = 6;
+    repeated BusEdges bus_edges = 7;
+    repeated CompanyEdge company_edges = 8;
+    TCProto.TransportRouter router = 9;
+    
+    //Make map render class
+    repeated SvgPoint stop_coords = 10;
+    repeated SvgPoint company_coords = 11;
+    repeated SvgColor bus_colors = 12;
+    RenderingSettings render_settings = 13;
+    
+    YellowPages.Database yellow_pages = 14;
+}
